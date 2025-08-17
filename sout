@@ -1,0 +1,40 @@
+#!/bin/bash 
+
+#cat "$1" | awk -F " " '{ print $1 "\t" $4}' | sort 
+#squeue -o "%.18i %.9u %.2t %.10M %.6D %R" | awk 'NR==1 {printf "%-10s %-8s %-4s %-8s %-6s %s\n","JOBID","USER","ST","TIME","NODES","NODELIST"; next} {printf "%-10s %-8s %-4s %-8s %-6s %s\n",$1,$2,$3,$4,$5,$6}'
+
+#cmd="$(squeue -h | awk -F " " '{ print $4 }' | uniq)" # printing the list of users in the queue
+
+# default behaviour of the script
+
+currentDate=$(date +%d%b%Y)
+currentTime=$(date +%H:%M)
+dataDir=/home/$USER/rAbhishek/git/data
+file="userlist_"$currentDate"_"$currentTime""
+
+cmd="$(squeue -h --format=%u | uniq)"
+nou="$(echo "$cmd" | wc -l)"
+
+
+
+
+
+
+
+
+
+
+
+
+
+Default() {
+    echo $currentDate
+    echo $currentTime
+    echo "Number of users in queue : $nou" 
+    echo "$cmd" > $dataDir/$file
+    echo "Files created with list of users currently in queue: $file"
+
+}
+
+
+Default
