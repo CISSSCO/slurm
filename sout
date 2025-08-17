@@ -12,15 +12,28 @@ currentTime=$(date +%H:%M)
 dataDir=/home/$USER/rAbhishek/git/data
 file="userlist_"$currentDate"_"$currentTime""
 
-cmd="$(squeue -h --format=%u | uniq)"
-nou="$(echo "$cmd" | wc -l)"
+listOfUsers="$(squeue -h --format=%u | uniq)"
+nou="$(echo "$listOfUsers" | wc -l)"
+squeueOutputDir=/home/$USER/rAbhishek/git/squeueOutput
 
 
 
 
-
-
-
+SortedSqueueOutput() {
+    for user in $listOfUsers
+    do
+        echo
+        echo
+        echo
+        echo "---------------------------------------------------"
+        echo "Job Submitted by $user"
+        echo "---------------------------------------------------"
+        squeue -u $user
+        echo
+        echo
+        echo
+    done
+}
 
 
 
@@ -31,8 +44,11 @@ Default() {
     echo $currentDate
     echo $currentTime
     echo "Number of users in queue : $nou" 
-    echo "$cmd" > $dataDir/$file
-    echo "Files created with list of users currently in queue: $file"
+    echo "$listOfUsers" > $dataDir/$file
+    echo "Files created with list of users currently in queue : $file"
+    squeue > $squeueOutputDir/"$currentDate"_"$currentTime"
+    echo "squeue output saved : $squeueOutputDir/$currentDate"_"$currentTime"
+    SortedSqueueOutput
 
 }
 
