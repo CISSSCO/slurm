@@ -36,6 +36,30 @@ SortedSqueueOutput() {
 }
 
 
+NodeInfo() {
+    echo "-----------------------------------"
+    echo "Idle Nodes"
+    echo "-----------------------------------"
+    echo
+    echo
+    echo
+    sinfo | grep idle | grep standard | awk -F " " '{ print $NF }' ; sinfo | grep idle | grep gpu | awk -F " " '{ print $NF }'
+    echo
+    echo
+    echo
+    echo "-----------------------------------"
+    echo "Allocated Nodes"
+    echo "-----------------------------------"
+    sinfo | grep alloc | grep standard | awk -F " " '{ print $NF }' ; sinfo | grep alloc | grep gpu | awk -F " " '{ print $NF }'
+    sinfo | grep mix | grep standard | awk -F " " '{ print $NF }' ; sinfo | grep mix | grep gpu | awk -F " " '{ print $NF }'
+    echo
+    echo
+    echo
+    echo "-----------------------------------"
+    echo "Down"
+    echo "-----------------------------------"
+    sinfo | grep down | grep standard | awk -F " " '{ print $NF }' ; sinfo | grep down | grep gpu | awk -F " " '{ print $NF }'
+}
 
 
 
@@ -48,7 +72,9 @@ Default() {
     echo "Files created with list of users currently in queue : $file"
     squeue > $squeueOutputDir/"$currentDate"_"$currentTime"
     echo "squeue output saved : $squeueOutputDir/$currentDate"_"$currentTime"
-    SortedSqueueOutput
+    #SortedSqueueOutput
+    NodeInfo > $dataDir/"nodelist_"$currentDate"_"$currentTime
+    echo "Nodelist output saved : $dataDir/"nodelist_"$currentDate"_"$currentTime"
 
 }
 

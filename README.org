@@ -1,3 +1,62 @@
 #+title: SLURM
 
 
+#+begin_src bash :tangle sout
+
+#!/bin/bash
+
+#cat "$1" | awk -F " " '{ print $1 "\t" $4}' | sort
+#squeue -o "%.18i %.9u %.2t %.10M %.6D %R" | awk 'NR==1 {printf "%-10s %-8s %-4s %-8s %-6s %s\n","JOBID","USER","ST","TIME","NODES","NODELIST"; next} {printf "%-10s %-8s %-4s %-8s %-6s %s\n",$1,$2,$3,$4,$5,$6}'
+
+#cmd="$(squeue -h | awk -F " " '{ print $4 }' | uniq)" # printing the list of users in the queue
+
+# default behaviour of the script
+
+currentDate=$(date +%d%b%Y)
+currentTime=$(date +%H:%M)
+dataDir=/home/$USER/rAbhishek/git/data
+file="userlist_"$currentDate"_"$currentTime""
+
+listOfUsers="$(squeue -h --format=%u | uniq)"
+nou="$(echo "$listOfUsers" | wc -l)"
+squeueOutputDir=/home/$USER/rAbhishek/git/squeueOutput
+
+
+
+
+SortedSqueueOutput() {
+    for user in $listOfUsers
+    do
+        echo
+        echo
+        echo
+        echo "---------------------------------------------------"
+        echo "Job Submitted by $user"
+        echo "---------------------------------------------------"
+        squeue -u $user
+        echo
+        echo
+        echo
+    done
+}
+
+
+
+
+
+
+Default() {
+    echo $currentDate
+    echo $currentTime
+    echo "Number of users in queue : $nou"
+    echo "$listOfUsers" > $dataDir/$file
+    echo "Files created with list of users currently in queue : $file"
+    squeue > $squeueOutputDir/"$currentDate"_"$currentTime"
+    echo "squeue output saved : $squeueOutputDir/$currentDate"_"$currentTime"
+    SortedSqueueOutput
+
+}
+
+
+Default
+#+end_src
